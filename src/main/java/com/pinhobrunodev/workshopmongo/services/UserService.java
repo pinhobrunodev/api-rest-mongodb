@@ -1,6 +1,8 @@
 package com.pinhobrunodev.workshopmongo.services;
 
+import com.pinhobrunodev.workshopmongo.models.dto.PostDTO;
 import com.pinhobrunodev.workshopmongo.models.dto.UserDTO;
+import com.pinhobrunodev.workshopmongo.models.entities.Post;
 import com.pinhobrunodev.workshopmongo.models.entities.User;
 import com.pinhobrunodev.workshopmongo.repositories.UserRepository;
 import com.pinhobrunodev.workshopmongo.services.exceptions.ResourceNotFoundException;
@@ -46,6 +48,11 @@ public class UserService {
         return repository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public  List<PostDTO> getUserPost(String id){
+        User user = getEntityById(id);
+        return user.getPosts().stream().map(PostDTO::new).collect(Collectors.toList());
+    }
 
     public void delete(String id){
         try {
@@ -56,6 +63,9 @@ public class UserService {
     }
 
     // Auxiliary methods
+
+
+
 
     private User copyDtoToEntity(User user, UserDTO dto) {
         user.setName(dto.getName());

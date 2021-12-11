@@ -1,5 +1,6 @@
 package com.pinhobrunodev.workshopmongo.controllers;
 
+import com.pinhobrunodev.workshopmongo.models.dto.PostDTO;
 import com.pinhobrunodev.workshopmongo.models.dto.UserDTO;
 import com.pinhobrunodev.workshopmongo.models.entities.User;
 import com.pinhobrunodev.workshopmongo.services.UserService;
@@ -42,6 +43,14 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findAll(){
         return  ResponseEntity.ok().body(service.findAll());
     }
+
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<PostDTO>> getUserPosts(@PathVariable String id){
+        return  ResponseEntity.ok().body(service.getUserPost(id));
+    }
+
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable String id){
         return  ResponseEntity.ok().body(service.findById(id));

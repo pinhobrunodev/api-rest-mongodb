@@ -1,6 +1,7 @@
 package com.pinhobrunodev.workshopmongo.services;
 
 import com.pinhobrunodev.workshopmongo.models.dto.UserDTO;
+import com.pinhobrunodev.workshopmongo.models.entities.User;
 import com.pinhobrunodev.workshopmongo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,12 @@ public class UserService {
     private UserRepository repository;
 
 
+    @Transactional
+    public UserDTO insert(UserDTO dto){
+        User user =  new User();
+        return new UserDTO(repository.save(copyDtoToEntity(user,dto)));
+    }
+
 
 
 
@@ -30,6 +37,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAll(){
         return repository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+
+    // Auxiliary methods
+
+    private User copyDtoToEntity(User user,UserDTO dto){
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        return user;
     }
 
 }

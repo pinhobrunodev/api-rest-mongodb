@@ -22,6 +22,12 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
+    public UserDTO findById(String id){
+        return repository.findById(id).map(UserDTO::new).orElseThrow(()-> new IllegalArgumentException("deu ruim no findbyid"));
+    }
+
+
+    @Transactional(readOnly = true)
     public List<UserDTO> findAll(){
         return repository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }

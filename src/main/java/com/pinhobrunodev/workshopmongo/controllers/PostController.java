@@ -21,7 +21,14 @@ public class PostController {
     public ResponseEntity<PostDTO> byId(@PathVariable String id){
         return ResponseEntity.ok().body(service.byID(id));
     }
-
+    @GetMapping(value="/fullsearch")
+    public ResponseEntity<List<PostDTO>> fullSearch(
+            @RequestParam(value="text", defaultValue="") String text,
+            @RequestParam(value="start", defaultValue="") String start,
+            @RequestParam(value="end", defaultValue="") String end) {
+        List<PostDTO> list = service.fullSearch(text, start, end);
+        return ResponseEntity.ok().body(list);
+    }
 
     @GetMapping(value = "/titlesearch")
     public ResponseEntity<List<PostDTO>> byTitle(@RequestParam(value = "text",defaultValue = "") String text){

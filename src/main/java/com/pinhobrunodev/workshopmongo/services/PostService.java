@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +32,15 @@ public class PostService {
         return repository.findByTitleContainingIgnoreCase(title).stream().map(PostDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<PostDTO> fullSearch(String text, String start, String end) {
+        Instant startMoment = convertMoment(start, Instant.ofEpochMilli(0L));
+        Instant endMoment = convertMoment(end, Instant.now());
+        List<Post> list = repository.fullSearch(text, startMoment, endMoment);
+        return list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());
+    }
+
+
 
     // Auxiliary methods
 
@@ -38,5 +49,13 @@ public class PostService {
         return result.orElseThrow(() -> new ResourceNotFoundException("Id not found : " + id));
     }
 
+    private Instant convertMoment(String orignalText, Instant alternative) {
+        try {
+            return Instant.parse(orignalText);
+        }
+        catch (DateTimeParseException e) {
+            return alternative;
+        }
+    }
 
 }

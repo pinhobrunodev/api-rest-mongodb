@@ -27,6 +27,11 @@ public class UserController {
     }
 
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable String id,@RequestBody UserDTO dto){
+        return ResponseEntity.ok().body(service.update(id,dto));
+    }
+
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
         return  ResponseEntity.ok().body(service.findAll());

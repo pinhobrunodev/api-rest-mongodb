@@ -5,6 +5,7 @@ import com.pinhobrunodev.workshopmongo.models.entities.User;
 import com.pinhobrunodev.workshopmongo.repositories.UserRepository;
 import com.pinhobrunodev.workshopmongo.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,14 @@ public class UserService {
         return repository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
+
+    public void delete(String id){
+        try {
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw  new ResourceNotFoundException("ID not found :"+id);
+        }
+    }
 
     // Auxiliary methods
 

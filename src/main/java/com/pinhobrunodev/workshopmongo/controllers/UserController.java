@@ -32,6 +32,12 @@ public class UserController {
         return ResponseEntity.ok().body(service.update(id,dto));
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id){
+        service.delete(id);
+        return  ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
         return  ResponseEntity.ok().body(service.findAll());
